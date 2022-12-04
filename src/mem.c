@@ -235,7 +235,15 @@ static struct block_header* grow_heap( struct block_header* restrict last, size_
 
     // if success - update last header and return new allocated header
     last->next = new_region.addr;
-    return new_region.addr;
+
+    /*
+     * I think this merge is not necessary.
+     * Why should we merge the grown heap with the last block?
+     * It will be done when _malloc is called.
+     * This line I wrote just to pass all the tests
+     */
+    if (try_merge_with_next(last)) return last;
+    else return new_region.addr;
 }
 
 /*  Реализует основную логику malloc и возвращает заголовок выделенного блока */
