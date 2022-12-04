@@ -23,8 +23,10 @@ list(FILTER sources EXCLUDE REGEX main.c)
 add_library(memalloc STATIC ${sources})
 target_include_directories(memalloc PUBLIC .)
 
-if(EXISTS main.c)
+# Something strange with if(EXISTS...)
+# So I just comment it
+# if(EXISTS main.c)
     add_executable(memalloc_exe main.c)
     target_link_libraries(memalloc_exe PRIVATE memalloc)
     set_target_properties(memalloc_exe PROPERTIES OUTPUT_NAME memalloc)
-endif()
+# endif()
