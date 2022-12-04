@@ -4,9 +4,9 @@
 #include "mem.h"
 #include "mem_internals.h"
 
-#include <stdio.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
 
 #include <sys/mman.h>
 
