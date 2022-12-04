@@ -5,21 +5,39 @@
 
 #include "tests.h"
 
+/**
+ * Prints message with heap debug
+ * @param message message to print
+ * @param heap heap to debug
+ */
 static void debug(char* message, void* heap) {
     printf("> %s\n", message);
     debug_heap(stdout, heap);
 }
 
+/**
+ * Initialize heap with given size
+ * @param initial_size initial size
+ * @return heap pointer
+ */
 static void* create_heap(size_t initial_size) {
     return heap_init(initial_size);
 }
 
+/**
+ * Deallocate heap
+ * @param heap heap to destroy
+ * @param heap_size heap size
+ */
 static void destroy_heap(void* heap, size_t heap_size) {
     munmap(heap, size_from_capacity((block_capacity) {.bytes = heap_size}).bytes);
 }
 
 
-bool test_usual_success_alloc() {
+/**
+ * Test usual memory allocation and free
+ */
+static bool test_usual_success_alloc() {
     size_t heap_size = 4096;
     void* heap = create_heap(heap_size);
     debug("Init", heap);
@@ -40,7 +58,10 @@ bool test_usual_success_alloc() {
 }
 
 
-bool test_single_block_free() {
+/**
+ * Test group of allocations and free in different places
+ */
+static bool test_single_block_free() {
     size_t heap_size = 4096;
     void* heap = create_heap(heap_size);
     debug("Init", heap);
@@ -71,7 +92,10 @@ bool test_single_block_free() {
 }
 
 
-bool test_double_block_free() {
+/**
+ * Test merging (group of free in one place)
+ */
+static bool test_double_block_free() {
     size_t heap_size = 4096;
     void* heap = create_heap(heap_size);
     debug("Init", heap);
@@ -102,7 +126,10 @@ bool test_double_block_free() {
 }
 
 
-bool test_grow_heap_and_merge() {
+/**
+ * Test heap growing (expanding the end of heap)
+ */
+static bool test_grow_heap_and_merge() {
     size_t heap_size = 4096;
     void* heap = create_heap(heap_size);
     debug("Init", heap);
@@ -129,7 +156,10 @@ bool test_grow_heap_and_merge() {
 }
 
 
-bool test_grow_heap_no_merge() {
+/**
+ * Test heap growing (but there is a barrier at the end of heap)
+ */
+static bool test_grow_heap_no_merge() {
     size_t heap_size = 4096;
     void* heap = create_heap(heap_size);
     debug("Init", heap);
@@ -165,6 +195,9 @@ bool test_grow_heap_no_merge() {
 }
 
 
+/**
+ * Array with tests
+ */
 test_func simple_test_funcs[] = {
         test_usual_success_alloc,
         test_single_block_free,
@@ -173,15 +206,21 @@ test_func simple_test_funcs[] = {
         test_grow_heap_no_merge
 };
 
+/**
+ * Length of simple_test_funcs
+ */
+size_t simple_test_funcs_count = 5;
+
+
 void test_func_simple_handler(test_func test, size_t num) {
     fprintf(stdout, "\n---------------- TEST %zu ----------------\n", num);
     if (!test()) fprintf(stdout, "TEST %zu failed\n", num);
     else fprintf(stdout, "TEST %zu passed\n", num);
 }
 
-void execute_tests(test_func_handler handler) {
-    size_t test_count = sizeof(simple_test_funcs) / sizeof(simple_test_funcs[0]);
-    for (size_t i = 0; i < test_count; i++) {
-        handler(simple_test_funcs[i], i);
+
+void execute_tests(test_func* tests, size_t tests_count, test_func_handler handler) {
+    for (size_t i = 0; i < tests_count; i++) {
+        handler(tests[i], i);
     }
 }

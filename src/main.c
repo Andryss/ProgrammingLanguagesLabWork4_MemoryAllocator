@@ -1,5 +1,10 @@
 #include "tests.h"
 
 int main() {
-    execute_tests(test_func_simple_handler);
+    // Let's test some tests
+    execute_tests(
+            simple_test_funcs,
+            simple_test_funcs_count,
+            test_func_simple_handler
+            );
 }
