@@ -98,6 +98,7 @@ static bool block_splittable( struct block_header* restrict block, size_t query)
  * @return true if block successfully split
  */
 static bool split_if_too_big( struct block_header* block, size_t query ) {
+    if (block == NULL) return false;
     if (!block_splittable(block, query)) return false;
 
     // calculate new block address and initialize the new block

@@ -214,7 +214,7 @@ size_t simple_test_funcs_count = 5;
 
 void test_func_simple_handler(test_func test, size_t num) {
     fprintf(stdout, "\n---------------- TEST %zu ----------------\n", num);
-    if (!test()) fprintf(stdout, "TEST %zu failed\n", num);
+    if (!test()) fprintf(stderr, "TEST %zu failed\n", num);
     else fprintf(stdout, "TEST %zu passed\n", num);
 }
 
